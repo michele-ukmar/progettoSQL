@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 
 DB_PATH = "movies.db"
-# Cambia i percorsi se i tuoi file sono in una cartella diversa
 MOVIES_CSV = "dataset/tmdb_5000_movies.csv"
 CREDITS_CSV = "dataset/tmdb_5000_credits.csv"
 
@@ -74,11 +73,19 @@ def populate():
             
             cursor.execute("INSERT OR IGNORE INTO departments (departmentName) VALUES (?)", (member['department'],))
             cursor.execute("SELECT departmentId FROM departments WHERE departmentName = ?", (member['department'],))
-            dept_id = cursor.fetchone()[0]
+            result = cursor.fetchone()
+            if result is None:
+                print(f"Warning: Department '{member['department']}' not found after insert")
+                continue
+            dept_id = result[0]
 
             cursor.execute("INSERT OR IGNORE INTO jobs (departmentId, jobName) VALUES (?, ?)", (dept_id, member['job']))
             cursor.execute("SELECT jobId FROM jobs WHERE jobName = ? AND departmentId = ?", (member['job'], dept_id))
-            job_id = cursor.fetchone()[0]
+            result = cursor.fetchone()
+            if result is None:
+                print(f"Warning: Job '{member['job']}' not found after insert in department {dept_id}")
+                continue
+            job_id = result[0]
 
             cursor.execute("INSERT INTO crew (filmId, personId, jobId) VALUES (?, ?, ?)", (f_id, member['id'], job_id))
 

@@ -1,12 +1,6 @@
-"""File con tutto il SQL necessario a creare le tabelle nel database."""
 import sqlite3
-import pandas as pd
-import json
-from pathlib import Path
 
-# Configurazione database
 DB_PATH = "movies.db"
-DATASET_PATH = Path("dataset")
 
 def creaDB():
     conn = sqlite3.connect(DB_PATH)
@@ -163,9 +157,9 @@ def creaDB():
     )
     """)
     print("✓ Tabella CREW creata")
-    
     conn.commit()
     conn.close()
     print("Tutte le tabelle sono state create con successo!")
+    
 if __name__ == "__main__":
     creaDB()
