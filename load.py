@@ -1,7 +1,6 @@
 import sqlite3
 import pandas as pd
 import json
-from pathlib import Path
 
 DB_PATH = "movies.db"
 MOVIES_CSV = "dataset/tmdb_5000_movies.csv"
@@ -55,7 +54,6 @@ def populate():
             cursor.execute("INSERT OR IGNORE INTO languages (languageCode, languageName) VALUES (?, ?)", (l['iso_639_1'], l['name']))
             cursor.execute("INSERT OR IGNORE INTO filmsLanguages (filmId, languageCode) VALUES (?, ?)", (f_id, l['iso_639_1']))
 
-    print("🎭 Elaborazione Cast e Crew...")
     for _, row in df_credits.iterrows():
         f_id = row['movie_id']
         
