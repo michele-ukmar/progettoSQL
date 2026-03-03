@@ -94,7 +94,6 @@ class ProApp(tk.Tk):
         self.paned = ttk.PanedWindow(self, orient="horizontal")
         self.paned.pack(fill="both", expand=True)
         
-        # Sidebar
         self.sidebar = ttk.Frame(self.paned, width=200, padding=10)
         self.paned.add(self.sidebar)
         ttk.Label(self.sidebar, text="Tabelle", font=('Arial', 10, 'bold')).pack(pady=(0,5))
@@ -102,11 +101,9 @@ class ProApp(tk.Tk):
         self.tbl_list.pack(fill="both", expand=True)
         self.tbl_list.bind("<<ListboxSelect>>", self.on_table_select)
         
-        # Main Content
         self.content = ttk.Frame(self.paned, padding=10)
         self.paned.add(self.content)
         
-        # Filtro
         self.f_frame = ttk.LabelFrame(self.content, text="Filtro WHERE", padding=5)
         self.f_frame.pack(fill="x")
         self.filter_var = tk.StringVar()
@@ -115,7 +112,6 @@ class ProApp(tk.Tk):
         ent.bind("<Return>", lambda e: self.load_current_table())
         ttk.Button(self.f_frame, text="Applica", command=self.load_current_table).pack(side="left")
 
-        # Azioni
         self.act = ttk.Frame(self.content)
         self.act.pack(fill="x", pady=5)
         self.btn_add = ttk.Button(self.act, text="Aggiungi", command=self.add_record)
@@ -125,7 +121,6 @@ class ProApp(tk.Tk):
         ttk.Button(self.act, text="Analisi (SQL)", command=self.run_analytic_query).pack(side="left", padx=2)
         self.btn_reset = ttk.Button(self.act, text="Ripristina Vista", command=self.reset_view)
 
-        # Tabella
         self.tree = ttk.Treeview(self.content, show="headings", selectmode="browse")
         self.tree.pack(fill="both", expand=True)
         self.tree.bind("<Double-1>", lambda e: self.edit_record())
@@ -136,7 +131,6 @@ class ProApp(tk.Tk):
 
     def on_table_select(self, e):
         if self.tbl_list.curselection() and self.tbl_list.cget("state") == "normal":
-            # Reset filtro prima di cambiare tabella per evitare errori di colonne inesistenti
             self.filter_var.set("") 
             self.current_table = self.tbl_list.get(self.tbl_list.curselection())
             self.load_current_table()
@@ -186,7 +180,6 @@ class ProApp(tk.Tk):
             
             self._execute_and_display(sql)
             
-            # Lock UI
             self.current_table = None 
             self.tbl_list.config(state="disabled")
             self.f_frame.pack_forget()
